@@ -7,3 +7,27 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+# DevContainer auto-generated files
+build.properties
+**/build.properties
+
+# Compiled files
+*.class
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*~
