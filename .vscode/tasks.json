@@ -133,7 +133,7 @@
         {
             "label": "Clean EJB Module",
             "type": "shell",
-            "command": "ant",
+            "command": "./build.sh",
             "args": [
                 "-f",
                 "HotelReservation-ejb/build.xml",
@@ -149,12 +149,12 @@
                 "clear": false
             },
             "problemMatcher": [],
-            "detail": "Clean EJB module build artifacts"
+            "detail": "Clean EJB module build artifacts using the build script"
         },
         {
             "label": "Clean WAR Module",
             "type": "shell",
-            "command": "ant",
+            "command": "./build.sh",
             "args": [
                 "-f",
                 "HotelReservation-war/build.xml",
@@ -170,7 +170,7 @@
                 "clear": false
             },
             "problemMatcher": [],
-            "detail": "Clean WAR module build artifacts"
+            "detail": "Clean WAR module build artifacts using the build script"
         }
     ]
 }
