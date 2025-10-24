@@ -4,7 +4,7 @@
         {
             "label": "Build (Full Project)",
             "type": "shell",
-            "command": "ant",
+            "command": "./build.sh",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -17,15 +17,13 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "problemMatcher": [
-                "$ant"
-            ],
-            "detail": "Build the entire HotelReservation project using Ant"
+            "problemMatcher": [],
+            "detail": "Build the entire HotelReservation project using the build script"
         },
         {
             "label": "Clean",
             "type": "shell",
-            "command": "ant",
+            "command": "./build.sh",
             "args": [
                 "clean"
             ],
@@ -38,10 +36,8 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "problemMatcher": [
-                "$ant"
-            ],
-            "detail": "Clean all build artifacts"
+            "problemMatcher": [],
+            "detail": "Clean all build artifacts using the build script"
         },
         {
             "label": "Build EJB Module",
@@ -60,9 +56,7 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "problemMatcher": [
-                "$ant"
-            ],
+            "problemMatcher": [],
             "detail": "Build only the EJB module"
         },
         {
@@ -82,15 +76,13 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "problemMatcher": [
-                "$ant"
-            ],
+            "problemMatcher": [],
             "detail": "Build only the WAR module"
         },
         {
             "label": "Create Distribution",
             "type": "shell",
-            "command": "ant",
+            "command": "./build.sh",
             "args": [
                 "dist"
             ],
@@ -103,10 +95,8 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "problemMatcher": [
-                "$ant"
-            ],
-            "detail": "Create distribution archives"
+            "problemMatcher": [],
+            "detail": "Create distribution archives using the build script"
         },
         {
             "label": "Deploy to GlassFish",
@@ -158,9 +148,7 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "problemMatcher": [
-                "$ant"
-            ],
+            "problemMatcher": [],
             "detail": "Clean EJB module build artifacts"
         },
         {
@@ -181,9 +169,7 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "problemMatcher": [
-                "$ant"
-            ],
+            "problemMatcher": [],
             "detail": "Clean WAR module build artifacts"
         }
     ]
