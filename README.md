@@ -1,7 +1,32 @@
 # Hotel Reservation System (RESTful API)
-A web application to book a room in a hotel, a customer must check the application to see if there is an empty room, the duration of the reservation and the overall cost ..etc. by introducing personal information.
+
+**Modernization Demonstration Repository**
+
+This repository demonstrates a **RESTful API modernization strategy** for the legacy Hotel Reservation System. Originally copied from **[hotel-demo-legacy](https://github.com/brianeh/hotel-demo-legacy)** (link to original repository), this project showcases how to add modern REST API capabilities to existing Java EE applications **without requiring major infrastructure upgrades**.
+
+**Modernization Goal**: Decouple the frontend from backend by adding RESTful API endpoints while preserving the existing JSP/Servlet web interface and maintaining compatibility with Java 8, GlassFish 4, and MySQL.
 
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+---
+
+## 🔄 Migration Strategy
+
+### Approach
+This modernization uses **JAX-RS (Java API for RESTful Web Services)** to add REST API capabilities to the existing Java EE 7 application. The strategy leverages the current technology stack without requiring upgrades to Java version, application server, or database.
+
+### Key Benefits
+- **Zero new dependencies**: Uses existing Java EE 7 APIs
+- **Non-disruptive**: Existing JSP/Servlet UI continues to work unchanged
+- **Reuses existing EJBs**: No business logic duplication
+- **Compatible stack**: Works with Java 8 and GlassFish 4
+- **Prepared entities**: Entities already have `@XmlRootElement` for JSON/XML serialization
+
+### Implementation Status
+✅ **Complete Implementation Guide Available**
+
+For detailed technical implementation, API endpoints, code examples, and testing instructions, see:
+- **[RESTful API Implementation Guide](docs/api/MODULES_AND_REST_API.md)** - Complete technical documentation
 
 ---
 
@@ -22,6 +47,7 @@ A web application to book a room in a hotel, a customer must check the applicati
 - **[SETUP.md](docs/SETUP.md)** - Comprehensive setup guide and troubleshooting
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - Complete system architecture documentation
 - **[ARCHITECTURE_DIAGRAM.md](docs/ARCHITECTURE_DIAGRAM.md)** - Visual architecture diagrams (Mermaid)
+- **[RESTful API Implementation Guide](docs/api/MODULES_AND_REST_API.md)** - Complete REST API modernization documentation
 - **[.devcontainer/README.md](.devcontainer/README.md)** - DevContainer technical details
 
 ### Key Commands:
@@ -62,6 +88,7 @@ Reservation       |
 
 ### Used Technologies & Frameworks
 * JavaEE (JSP, Servlet, EJB)
+* JAX-RS (RESTful Web Services)
 * Bootstrap
 
 ### Used Database
