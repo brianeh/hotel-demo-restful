@@ -28,6 +28,8 @@ This modernization uses **JAX-RS (Java API for RESTful Web Services)** to add RE
 For detailed technical implementation, API endpoints, code examples, and testing instructions, see:
 - **[RESTful API Implementation Guide](docs/api/MODULES_AND_REST_API.md)** - Complete technical documentation
 
+🚧 **RESTful API Implementation In Progress**
+
 ---
 
 ## 🚀 DevContainer Quick Start
@@ -119,8 +121,3 @@ Reservation       |
 5. Import the project in NetBeans or any other IDE.
 6. Deploy & Run the application :D
 
-### Contributing 🔧
-If you want to contribute to this project and make it better with new ideas, your pull request is very welcomed.
-If you find any issue just put it in the repository issue section, thank you.
-
-.سبحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، أَشْهَدُ أَنْ لا إِلهَ إِلأَ انْتَ أَسْتَغْفِرُكَ وَأَتْوبُ إِلَيْكَ
