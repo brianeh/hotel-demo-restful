@@ -1,4 +1,4 @@
-# Hotel Reservation System
+# Hotel Reservation System (RESTful API)
 A web application to book a room in a hotel, a customer must check the application to see if there is an empty room, the duration of the reservation and the overall cost ..etc. by introducing personal information.
 
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
