@@ -19,11 +19,20 @@
 				"ms-vscode.vscode-json",
 				"bradlc.vscode-tailwindcss",
 				"formulahendry.auto-rename-tag",
-				"ms-vscode.vscode-css-peek"
+				"ms-vscode.vscode-css-peek",
+				"ms-vscode.vscode-html-css-support",
+				"ms-vscode.vscode-javascript-booster",
+				"cweijan.vscode-mysql-client2",
+				"ms-vscode.vscode-js-debug",
+				"pthorsson.vscode-jsp"
 			]
 		}
 	},
-	"forwardPorts": [8080, 3306, 4848],
+	"forwardPorts": [
+		8080,
+		3306,
+		4848
+	],
 	"portsAttributes": {
 		"8080": {
 			"label": "GlassFish Application",

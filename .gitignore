@@ -16,7 +16,10 @@ build.properties
 *.class
 
 # IDE
-.vscode/
+.vscode/settings.json.user
+.vscode/launch.json.user
+.vscode/tasks.json.user
+.vscode/.ropeproject
 .idea/
 *.iml
 
