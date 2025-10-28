@@ -106,6 +106,14 @@ asadmin undeploy HotelReservation
 tail -f $GLASSFISH_HOME/glassfish/domains/domain1/logs/server.log
 ```
 
+## Configuration Details
+
+### Jackson JAXB Annotations Module
+
+The Dockerfile installs `jackson-module-jaxb-annotations-2.5.1.jar` to `/opt/glassfish4/glassfish/modules/` to support JSON deserialization in REST API endpoints. Without this module, you would encounter `NoClassDefFoundError` when attempting to create or update resources via POST/PUT requests.
+
+This module is installed automatically during the container build process and persists across container rebuilds.
+
 ## Troubleshooting
 
 ### MySQL Won't Start
@@ -151,6 +159,24 @@ asadmin create-jdbc-resource \
   --connectionpoolid HotelReservationPool \
   hotel
 ```
+
+### REST API JSON Deserialization Fails (NoClassDefFoundError)
+If you encounter `NoClassDefFoundError: com/fasterxml/jackson/module/jaxb/JaxbAnnotationIntrospector` when making POST/PUT requests:
+
+```bash
+# Check if the module is installed
+ls -lh $GLASSFISH_HOME/glassfish/modules/jackson-module-jaxb-annotations*.jar
+
+# If missing, install it manually
+cd $GLASSFISH_HOME/glassfish/modules && \
+wget https://repo1.maven.org/maven2/com/fasterxml/jackson/module/jackson-module-jaxb-annotations/2.5.1/jackson-module-jaxb-annotations-2.5.1.jar && \
+sudo chown vscode:vscode jackson-module-jaxb-annotations-2.5.1.jar
+
+# Restart GlassFish
+asadmin restart-domain domain1
+```
+
+The Dockerfile includes this module installation by default, so this error should not occur in fresh container builds.
 
 ## Environment Variables
 

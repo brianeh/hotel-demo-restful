@@ -156,13 +156,28 @@ Create `HotelReservation-war/src/java/rest/ApplicationConfig.java`:
 ```java
 package rest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+/**
+ * JAX-RS Application configuration
+ * 
+ * This configuration disables MOXy JSON provider and allows Jersey
+ * to use Jackson for JSON parsing instead.
+ */
 @ApplicationPath("api")
 public class ApplicationConfig extends Application {
-    // Auto-discovers all @Path annotated classes
-    // No additional configuration needed
+
+    @Override
+    public Map<String, Object> getProperties() {
+        Map<String, Object> props = new HashMap<>();
+        // Disable MOXy JSON provider - this will make Jersey use Jackson
+        props.put("jersey.config.server.disableMoxyJson", true);
+        return props;
+    }
 }
 ```
 
@@ -175,8 +190,8 @@ package rest;
 
 import java.net.URI;
 import java.util.List;
+
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -187,50 +202,54 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import models.Room;
 import sessionbeans.RoomFacadeLocal;
 
 @Path("rooms")
-@Stateless
 public class RoomResource {
-    
+
     @EJB
     private RoomFacadeLocal roomFacade;
-    
+
     @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Room> getAllRooms() {
         return roomFacade.findAll();
     }
-    
+
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Response getRoom(@PathParam("id") Integer id) {
+        if (id == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
         Room room = roomFacade.find(id);
+
         if (room == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+
         return Response.ok(room).build();
     }
-    
+
     @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Response createRoom(Room room) {
         try {
             roomFacade.create(room);
-            return Response.created(
-                URI.create("/api/rooms/" + room.getId())
-            ).entity(room).build();
+            return Response.created(URI.create("/api/rooms/" + room.getId())).entity(room).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
-    
+
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Response updateRoom(@PathParam("id") Integer id, Room room) {
         try {
             room.setId(id);
@@ -240,7 +259,7 @@ public class RoomResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
-    
+
     @DELETE
     @Path("{id}")
     public Response deleteRoom(@PathParam("id") Integer id) {
@@ -249,6 +268,7 @@ public class RoomResource {
             if (room != null) {
                 roomFacade.remove(room);
             }
+
             return Response.noContent().build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -269,8 +289,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -282,93 +302,91 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import models.Reservation;
 import models.Room;
 import sessionbeans.ReservationFacadeLocal;
 import sessionbeans.RoomFacadeLocal;
 
 @Path("reservations")
-@Stateless
 public class ReservationResource {
-    
+
     @EJB
     private ReservationFacadeLocal reservationFacade;
-    
+
     @EJB
     private RoomFacadeLocal roomFacade;
-    
+
     @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Reservation> getAllReservations() {
         return reservationFacade.findAll();
     }
-    
+
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Response getReservation(@PathParam("id") Integer id) {
+        if (id == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
         Reservation reservation = reservationFacade.find(id);
+
         if (reservation == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+
         return Response.ok(reservation).build();
     }
-    
+
     @GET
     @Path("search")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response searchAvailability(
-            @QueryParam("checkIn") String checkInStr,
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Response searchAvailability(@QueryParam("checkIn") String checkInStr,
             @QueryParam("checkOut") String checkOutStr) {
-        
-        if (checkInStr == null || checkOutStr == null) {
+        if ((checkInStr == null) || (checkOutStr == null)) {
             return Response.status(Response.Status.BAD_REQUEST)
-                .entity("Both checkIn and checkOut parameters are required").build();
+                    .entity("Both checkIn and checkOut parameters are required").build();
         }
-        
+
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date checkIn = sdf.parse(checkInStr);
             Date checkOut = sdf.parse(checkOutStr);
-            
+
             List<Room> availableRooms = roomFacade.findAll();
             List<Reservation> reservations = reservationFacade.findAll();
-            
-            // Filter out rooms with conflicting reservations
+
             for (Reservation reservation : reservations) {
-                if (hasDateConflict(checkIn, checkOut, 
-                    reservation.getCheckInDate(), reservation.getCheckOutDate())) {
-                    
-                    availableRooms.removeIf(room -> 
-                        room.getId().equals(reservation.getIdRoom()));
+                if (hasDateConflict(checkIn, checkOut, reservation.getCheckInDate(), reservation.getCheckOutDate())) {
+                    availableRooms.removeIf(room -> room.getId().equals(reservation.getIdRoom()));
                 }
             }
-            
+
             return Response.ok(availableRooms).build();
-            
+
         } catch (ParseException e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                .entity("Invalid date format. Use yyyy-MM-dd").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid data format.  Use yyyy-MM-dd").build();
         }
     }
-    
+
     @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Response createReservation(Reservation reservation) {
         try {
             reservationFacade.create(reservation);
             return Response.created(
-                URI.create("/api/reservations/" + reservation.getId())
-            ).entity(reservation).build();
+                    URI.create("/api/reservations/" + reservation.getId())).entity(reservation).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
-    
+
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Response updateReservation(@PathParam("id") Integer id, Reservation reservation) {
         try {
             reservation.setId(id);
@@ -378,7 +396,7 @@ public class ReservationResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
-    
+
     @DELETE
     @Path("{id}")
     public Response cancelReservation(@PathParam("id") Integer id) {
@@ -392,7 +410,7 @@ public class ReservationResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
-    
+
     private boolean hasDateConflict(Date checkIn1, Date checkOut1, Date checkIn2, Date checkOut2) {
         return (checkIn1.before(checkOut2) && checkOut1.after(checkIn2));
     }
@@ -423,12 +441,14 @@ After deployment, the REST API will be accessible at:
 ### Advantages of This Approach
 
 - **Zero new dependencies**: Uses existing Java EE 7 APIs
+- **Jackson JSON support**: Configured to use Jackson instead of MOXy for better JSON serialization
 - **Reuses existing EJB facades**: No business logic duplication
 - **Compatible with current stack**: Works with Java 8 and GlassFish 4
 - **Non-disruptive**: Existing JSP/Servlet UI continues to work unchanged
 - **Prepared entities**: Entities already have `@XmlRootElement` for serialization
 - **Automatic content negotiation**: JSON/XML support built-in
 - **Validation support**: Leverages existing Bean Validation annotations
+- **Proper null checking**: Enhanced error handling with null checks for request parameters
 
 ### Alternative Options Considered
 
@@ -516,6 +536,50 @@ curl -X PUT "http://localhost:8080/HotelReservation-war/api/reservations/1" \
 curl -X DELETE "http://localhost:8080/HotelReservation-war/api/reservations/1"
 ```
 
+### Interactive HTML Test Page
+
+The easiest way to test the REST API is through the interactive HTML test page included in the application.
+
+**Access URL**: `http://localhost:8080/HotelReservation-war/rest-test.html`
+
+This interactive test page provides a visual, browser-based interface for testing all REST API endpoints without requiring command-line tools.
+
+#### Features
+
+- **Visual Interface**: Test all API endpoints through a user-friendly web interface
+- **Auto-Loading**: Automatically loads and displays all rooms when the page opens
+- **Interactive Forms**: Pre-filled forms for easy parameter entry
+- **Real-Time Feedback**: See request status (loading, success, error) with visual indicators
+- **Formatted Responses**: JSON responses are displayed in formatted, readable format
+- **Room Cards**: Visual room cards with icons showing room details in an easy-to-read format
+- **No Additional Tools Required**: Works directly in any modern web browser
+
+#### Available Test Sections
+
+1. **Get All Rooms** - Fetches all rooms from the hotel and displays them as visual cards
+2. **Get Room by ID** - Enter a room ID to fetch specific room details as JSON
+3. **Search Available Rooms** - Enter check-in and check-out dates to find available rooms
+4. **Create Reservation** - Fill out the form to create a new reservation
+5. **Get All Reservations** - View all existing reservations in JSON format
+
+#### Usage
+
+1. Deploy the application (if not already deployed): `./deploy.sh`
+2. Open your web browser
+3. Navigate to: `http://localhost:8080/HotelReservation-war/rest-test.html`
+4. The page automatically loads and displays all rooms on startup
+5. Click buttons to test different API endpoints
+6. View formatted JSON responses or visual room cards in the response areas
+
+#### Benefits Over curl
+
+- **Visual Interface**: See results in formatted JSON and visual cards instead of raw command output
+- **No Command Line**: No need to remember curl syntax or write commands
+- **Interactive**: Click buttons and fill forms instead of typing long URLs
+- **Easy to Share**: Simply share the URL with team members
+- **Instant Feedback**: Visual status indicators show loading, success, and error states
+- **Parameter Validation**: Forms help prevent errors with date pickers and input validation
+
 ### Response Examples
 
 #### Room JSON Response
@@ -574,6 +638,10 @@ The existing `.vscode/settings.json` already includes the WAR module source path
 ```
 
 No additional configuration is needed for the REST resources.
+
+### JSON Provider Configuration
+
+The `ApplicationConfig` class configures JAX-RS to use Jackson for JSON serialization instead of the default MOXy provider. This provides better JSON output and is configured via the `jersey.config.server.disableMoxyJson` property.
 
 ### Build Process
 

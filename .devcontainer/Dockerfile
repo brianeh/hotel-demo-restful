@@ -45,6 +45,10 @@ RUN cd /opt && \
 RUN useradd -m -s /bin/bash vscode && \
     echo 'vscode ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
+# Install Jackson JAXB annotations module for GlassFish to support JSON deserialization
+RUN cd /opt/glassfish4/glassfish/modules && \
+    wget -q https://repo1.maven.org/maven2/com/fasterxml/jackson/module/jackson-module-jaxb-annotations/2.5.1/jackson-module-jaxb-annotations-2.5.1.jar
+
 # Set GlassFish ownership to vscode user
 RUN chown -R vscode:vscode /opt/glassfish4
 

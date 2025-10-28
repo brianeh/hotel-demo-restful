@@ -24,6 +24,7 @@
         "/opt/glassfish4/glassfish/modules/javax.servlet-api.jar",
         "/opt/glassfish4/glassfish/modules/javax.servlet.jsp-api.jar",
         "/opt/glassfish4/glassfish/modules/javax.servlet.jsp.jstl-api.jar",
+        "/opt/glassfish4/glassfish/modules/javax.ws.rs-api.jar",
         "/opt/glassfish4/glassfish/modules/javax.validation-api.jar",
         "/opt/glassfish4/glassfish/modules/bean-validator.jar",
         "/opt/glassfish4/glassfish/modules/endorsed/jaxb-api.jar",
