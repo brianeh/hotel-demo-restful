@@ -8,6 +8,8 @@ This repository demonstrates a **RESTful API modernization strategy** for the le
 
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+> Note: This repository is part of the Hotel Modernization umbrella project: [hotel-modernization](https://github.com/brianeh/hotel-modernization).
+
 ---
 
 ## 🔄 Migration Strategy
