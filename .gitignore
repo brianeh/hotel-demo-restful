@@ -34,3 +34,6 @@ Thumbs.db
 *.tmp
 *.bak
 *~
+
+# Database dumps
+database/dump/data/mysql_dump.sql
