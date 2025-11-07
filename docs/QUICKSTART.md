@@ -30,6 +30,9 @@ That's it! 🎉
 # Build and deploy
 ./deploy.sh
 
+# Export database dump (writes to database/dump/data/mysql_dump.sql)
+./database/dump/export_data.sh
+
 # Build only
 ant dist
 
@@ -42,6 +45,8 @@ tail -f /opt/glassfish4/glassfish/domains/domain1/logs/server.log
 # Restart GlassFish
 asadmin restart-domain domain1
 ```
+
+Need a different password? Prefix the command with `MYSQL_PASSWORD=...` before running the export script.
 
 ## Access URLs
 

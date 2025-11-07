@@ -199,6 +199,20 @@ SELECT * FROM room;
 SELECT * FROM reservation;
 ```
 
+### Exporting the Database
+
+Use `database/dump/export_data.sh` to create a mysqldump backup of `hotel_reservation_system`. The script checks that `mysqldump` is available, validates the output directory, and writes to `database/dump/data/mysql_dump.sql`.
+
+```bash
+# Default credentials (root/root inside the DevContainer)
+./database/dump/export_data.sh
+
+# Override the password if you changed it
+MYSQL_PASSWORD=your-secret ./database/dump/export_data.sh
+```
+
+The script exits with a non-zero status on failure. Review the output message to confirm the dump succeeded.
+
 ## Troubleshooting
 
 ### GlassFish Not Running
